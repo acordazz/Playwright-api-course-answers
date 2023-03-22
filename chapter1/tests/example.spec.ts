@@ -40,8 +40,9 @@ test("GET list of bookings, baseURL from .env", async ({ request }) => {
 Using parameters
 3721 - John Doe
 */
-test("GET list of bookings, using params", async ({ request }) => {
-  const response = await request.get("booking/9503");
+test("GET individual booking, using params", async ({ request }) => {
+  const bookingId = 852;
+  const response = await request.get(`booking/${bookingId}`);
 
   expect(response.status(), "testing whether status is 200").toBe(200);
   const body = await response.json();
@@ -67,7 +68,8 @@ test("POST booking", async ({ request }) => {
       "additionalneeds" : "Breakfast"
   },
   headers: {
-    'Accept': "application/json"
+    'Accept': "application/json",
+    "Content-Type": "application/json"
   }
   });
 
@@ -80,19 +82,74 @@ test("POST booking", async ({ request }) => {
 /*
 
 creating API key and using it on DEL
-
+- chaining calls
+- response is JSON
+- Save bookingId in variable to use in new request
+- MAKE FIRST WITHOUT AUTHORIZATION
+- use of some authentication
 */
-const Token = 'd278cef88883cba'
-const BookingId = "18312"
-test("DELETE booking", async ({ request }) => {
-  const response = await request.delete(`booking/${BookingId}`, {
+
+
+test("POST and DELETE booking", async ({ request }) => {
+
+  let response = await request.post("booking", {
+    data: {
+      "firstname" : "Johnny",
+      "lastname" : "Cash",
+      "totalprice" : 111,
+      "depositpaid" : true,
+      "bookingdates" : {
+          "checkin" : "2018-01-01",
+          "checkout" : "2019-01-01"
+      },
+      "additionalneeds" : "Breakfast"
+  },
+  headers: {
+    'Accept': "application/json"
+  }
+  });
+
+  expect(response.status(), "testing whether status is 200").toBe(200);
+  const BodyPost = await response.json();
+  const BookingId = BodyPost.bookingid;
+  console.log(`New booking: ${BookingId}`);
+
+  const responseDel = await request.delete(`booking/${BookingId}`, {
     headers: {
       // 'Cookie': `token=${Token}`
       'Authorization': 'Basic YWRtaW46cGFzc3dvcmQxMjM='
     }
   });
 
-  expect(response.status(), "testing whether status is 201").toBe(201);
+  expect(responseDel.status(), "testing whether status is 201").toBe(201);
+});
+
+/*
+PUT
+- you update the entire entry - not just parts of it (that would be PATCH)
+*/
+test("PUT booking", async ({ request }) => {
+  const bookingId = 852;
+  const response = await request.put(`booking/${bookingId}`, {
+    data: {
+      firstname: "Johnny",
+      lastname: "Cash",
+      totalprice: 111,
+      depositpaid: false,
+      bookingdates: {
+        checkin: "2013-01-01",
+        checkout: "2014-01-01",
+      },
+      additionalneeds: "lunch",
+    },
+  headers: {
+    'Accept': "application/json",
+    'Content-Type': 'application/json',
+    'Authorization': 'Basic YWRtaW46cGFzc3dvcmQxMjM='
+  }
+  });
+
+  expect(response.status(), "testing whether status is 200").toBe(200);
   const body = await response.json();
   console.log(JSON.stringify(body));
 });
