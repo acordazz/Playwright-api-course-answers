@@ -29,7 +29,7 @@ Change test:
 
 */
 test("GET list of bookings, baseURL from .env", async ({ request }) => {
-  const response = await request.get("booking/");
+  const response = await request.get("https://restful-booker.herokuapp.com/booking/");
 
   expect(response.status(), "testing whether status is 200").toBe(200);
   const body = await response.json();
@@ -42,7 +42,7 @@ Using parameters
 */
 test("GET individual booking, using params", async ({ request }) => {
   const bookingId = 852;
-  const response = await request.get(`booking/${bookingId}`);
+  const response = await request.get(`https://restful-booker.herokuapp.com/booking/${bookingId}`);
 
   expect(response.status(), "testing whether status is 200").toBe(200);
   const body = await response.json();
@@ -55,7 +55,7 @@ POST
 - headers
 */
 test("POST booking", async ({ request }) => {
-  const response = await request.post("booking", {
+  const response = await request.post("https://restful-booker.herokuapp.com/booking", {
     data: {
       "firstname" : "Johnny",
       "lastname" : "Cash",
@@ -92,7 +92,7 @@ creating API key and using it on DEL
 
 test("POST and DELETE booking", async ({ request }) => {
 
-  let response = await request.post("booking", {
+  let response = await request.post("https://restful-booker.herokuapp.com/booking", {
     data: {
       "firstname" : "Johnny",
       "lastname" : "Cash",
@@ -114,7 +114,7 @@ test("POST and DELETE booking", async ({ request }) => {
   const BookingId = BodyPost.bookingid;
   console.log(`New booking: ${BookingId}`);
 
-  const responseDel = await request.delete(`booking/${BookingId}`, {
+  const responseDel = await request.delete(`https://restful-booker.herokuapp.com/booking/${BookingId}`, {
     headers: {
       // 'Cookie': `token=${Token}`
       'Authorization': 'Basic YWRtaW46cGFzc3dvcmQxMjM='
@@ -130,7 +130,7 @@ PUT
 */
 test("PUT booking", async ({ request }) => {
   const bookingId = 852;
-  const response = await request.put(`booking/${bookingId}`, {
+  const response = await request.put(`https://restful-booker.herokuapp.com/booking/${bookingId}`, {
     data: {
       firstname: "Johnny",
       lastname: "Cash",
