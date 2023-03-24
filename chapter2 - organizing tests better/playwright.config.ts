@@ -39,6 +39,10 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    // proxy: {
+    //   server: "http://127.0.0.1:8888"      
+    // },
+    // ignoreHTTPSErrors: true
   },
 
   /* Configure projects for major browsers */
