@@ -108,6 +108,14 @@ test.describe("Using common setup", () => {
   test("Search for a booking and if it is found, delete another one", async ({
     request,
   }) => {
+    
+    // test.fail(!process.env.CI, 'Test will fail unless if run on CI pipeline.');
+    // expect(false).toBe(true);
+
+    // test.skip(!process.env.CI, 'Skip this test when running outside a CI pipeline.');
+
+
+    await test.step('getting first booking', async () => {
     const responseFirstBooking = await request.get(
       `https://restful-booker.herokuapp.com/booking`,
       {
@@ -123,7 +131,7 @@ test.describe("Using common setup", () => {
     );
     const BodyFirstPost: any[] = await responseFirstBooking.json();
     const BookingIdFirst = BodyFirstPost[0].bookingid;
-    console.log(`First booking: ${BookingIdFirst}`);
+    console.log(`First booking: ${BookingIdFirst}`);});
 
     const responseSecondBooking = await request.get(
       `https://restful-booker.herokuapp.com/booking`,
