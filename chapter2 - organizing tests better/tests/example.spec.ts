@@ -149,7 +149,7 @@ test.describe("Using common setup", () => {
     ).toBe(200);
     const BodySecondPost: any[] = await responseSecondBooking.json();
     const BookingIdSecond = BodySecondPost[0].bookingid;
-    console.log(`First booking: ${BookingIdSecond}`);
+    console.log(`Second booking: ${BookingIdSecond}`);
   });
 });
 
