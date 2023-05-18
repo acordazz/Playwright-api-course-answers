@@ -1,38 +1,84 @@
-import Ajv from "ajv";
+import { JSONSchemaType } from "ajv";
+import Ajv from "ajv/dist/jtd";
 const ajv = new Ajv();
 
-type iUser = {
-  userId: number;
-  firstName: string | undefined;
-  lastName: string | undefined;
-  username: string | undefined;
-  password: string | undefined;
-  gender: string | undefined;
-  userTypeId: number;
+type tUser = {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone: string;
+  userStatus: number;
 };
 
-type iLogin = {
-  token: string;
-  userDetails: iUser;
-}
-
-export const schemaLogin = {
+export const schemaUser = {
   type: "object",
   properties: {
-    token: { type: "string" },
-    userDetails: { 
+    id: { type: "number" },
+    username: { type: "string" },
+    firstName: { type: "string" },
+    lastName: { type: "string" },
+    email: { type: "string" },
+    password: { type: "string" },
+    phone: { type: "string" },
+    userStatus: { type: "number" },
+  },
+};
+
+interface iTag {
+  id: number;
+  name: string;
+};
+
+export interface iPet {
+  id: number;
+  category: {
+    id: number;
+    name: string;
+  };
+  name: string;
+  photoUrls: string[];
+  tags: iTag[];
+  status: string;
+};
+
+const schemaTag: JSONSchemaType<iTag> = {
+  type: "object",
+  properties: {
+    id: { type: "number" },
+    name: { type: "string" },
+  },
+  required: ["id", "name"]
+}
+
+export const schemaPet: JSONSchemaType<iPet> = {
+  type: "object",
+  properties: {
+    id: { type: "number" },
+    category: {
       type: "object",
       properties: {
-        userId: {type: "number" },
-        firstName: {type: ["string", "null"] },
-        lastName: {type: ["string", "null"] },
-        username: {type: ["string", "null"] },
-        password: {type: ["string", "null"] },
-        gender: {type: ["string", "null"] },
-        userTypeId: {type: "number" },
+        id: { type: "number" },
+        name: { type: "string" },
       },
-      required: ["userId", "userTypeId"]
-   },
+      required: ["id", "name"],
+    },
+    name: { type: "string" },
+    photoUrls: {
+      type: "array",
+      items: { type: "string" },
+    },
+    tags: {
+      type: "array",
+      items: schemaTag,
+    },
+    status: { 
+      type: "string", 
+      enum: ["available", "pending", "sold"] 
+    },
   },
-  required: ["token", "userDetails"]
+  required: ["id", "category", "name", "photoUrls", "tags", "status"],
+  additionalProperties: false
 };
