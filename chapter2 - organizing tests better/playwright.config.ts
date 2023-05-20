@@ -43,6 +43,9 @@ export default defineConfig({
     //   server: "http://127.0.0.1:8888"      
     // },
     // ignoreHTTPSErrors: true
+    // extraHTTPHeaders: {
+    //   Accept: "application/json",
+    // },
   },
 
   /* Configure projects for major browsers */
@@ -52,15 +55,15 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {
