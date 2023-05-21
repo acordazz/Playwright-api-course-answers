@@ -76,7 +76,6 @@ test.describe("Using common setup", () => {
       `https://restful-booker.herokuapp.com/booking/${bookingForBeforeEach}`,
       {
         headers: {
-          // 'Cookie': `token=${Token}`
           Authorization: "Basic YWRtaW46cGFzc3dvcmQxMjM=",
         },
       }
@@ -93,7 +92,6 @@ test.describe("Using common setup", () => {
       `https://restful-booker.herokuapp.com/booking/${bookingForBeforeAll}`,
       {
         headers: {
-          // 'Cookie': `token=${Token}`
           Authorization: "Basic YWRtaW46cGFzc3dvcmQxMjM=",
         },
       }
@@ -105,13 +103,15 @@ test.describe("Using common setup", () => {
     ).toBe(201);
   });
 
-  test("Search for a booking and if it is found, delete another one", async ({
+  test("Search for two bookings", async ({
     request,
   }) => {
     // test.fail(!process.env.CI, 'Test will fail unless if run on CI pipeline.');
     // expect(false).toBe(true);
 
     // test.skip(!process.env.CI, 'Skip this test when running outside a CI pipeline.');
+
+    // surround with test.step
 
     await test.step("getting first booking", async () => {
       const responseFirstBooking = await request.get(
