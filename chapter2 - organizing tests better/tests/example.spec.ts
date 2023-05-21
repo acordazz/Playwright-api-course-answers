@@ -108,56 +108,73 @@ test.describe("Using common setup", () => {
   test("Search for a booking and if it is found, delete another one", async ({
     request,
   }) => {
-    
     // test.fail(!process.env.CI, 'Test will fail unless if run on CI pipeline.');
     // expect(false).toBe(true);
 
     // test.skip(!process.env.CI, 'Skip this test when running outside a CI pipeline.');
 
+    await test.step("getting first booking", async () => {
+      const responseFirstBooking = await request.get(
+        `https://restful-booker.herokuapp.com/booking`,
+        {
+          params: {
+            firstname: "Mary Jane",
+            lastname: `Watson${seedNumber}`,
+          },
+        }
+      );
 
-    await test.step('getting first booking', async () => {
-    const responseFirstBooking = await request.get(
-      `https://restful-booker.herokuapp.com/booking`,
-      {
-        params: {
-          firstname: "Mary Jane",
-          lastname: `Watson${seedNumber}`,
-        },
-      }
-    );
+      expect(
+        responseFirstBooking.status(),
+        "testing whether status is 200"
+      ).toBe(200);
+      const BodyFirstPost: any[] = await responseFirstBooking.json();
+      const BookingIdFirst = BodyFirstPost[0].bookingid;
+      console.log(`First booking: ${BookingIdFirst}`);
+    });
 
-    expect(responseFirstBooking.status(), "testing whether status is 200").toBe(
-      200
-    );
-    const BodyFirstPost: any[] = await responseFirstBooking.json();
-    const BookingIdFirst = BodyFirstPost[0].bookingid;
-    console.log(`First booking: ${BookingIdFirst}`);});
-
-    const responseSecondBooking = await request.get(
-      `https://restful-booker.herokuapp.com/booking`,
-      {
-        params: {
-          firstname: "Peter",
-          lastname: `Parker${seedNumber}`,
-        },
-      }
-    );
-
-    expect(
-      responseSecondBooking.status(),
-      "testing whether status is 200"
-    ).toBe(200);
-    const BodySecondPost: any[] = await responseSecondBooking.json();
-    const BookingIdSecond = BodySecondPost[0].bookingid;
-    console.log(`Second booking: ${BookingIdSecond}`);
+    test.step("getting second booking", async () => {
+      const responseSecondBooking = await request.get(
+        `https://restful-booker.herokuapp.com/booking`,
+        {
+          params: {
+            firstname: "Peter",
+            lastname: `Parker${seedNumber}`,
+          },
+        }
+      );
+  
+      expect(
+        responseSecondBooking.status(),
+        "testing whether status is 200"
+      ).toBe(200);
+      const BodySecondPost: any[] = await responseSecondBooking.json();
+      const BookingIdSecond = BodySecondPost[0].bookingid;
+      console.log(`Second booking: ${BookingIdSecond}`);
+    })
   });
 });
 
 /*
-
-
 Parameterized tests
 */
+test.describe("Getting multiple bookings individually", async () => {
+  const bookingIds = [1055, 1921, 2615];
+  for (const id of bookingIds) {
+    test(`Get booking ${id}`, async ({ request }) => {
+      const responseFirstBooking = await request.get(
+        `https://restful-booker.herokuapp.com/booking/${id}`
+      );
+
+      expect(
+        responseFirstBooking.status(),
+        "testing whether status is 200"
+      ).toBe(200);
+      const bodyJson = await responseFirstBooking.json();
+      console.log(`Booking for id ${id}: ${JSON.stringify(bodyJson)}`);
+    });
+  }
+});
 
 /*
 
